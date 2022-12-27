@@ -25,12 +25,18 @@ def inference(model_inputs:dict) -> dict:
     no_speech_threshold = model_inputs.get('no_speech_threshold', 0.1)
     logprob_threshold = model_inputs.get('logprob_threshold', -1.0)
 
+    args = {
+        "language": language,
+        "logprob_threshold": logprob_threshold,
+        "no_speech_threshold": no_speech_threshold,
+    }
+
     mp3Bytes = BytesIO(base64.b64decode(audio.encode("ISO-8859-1")))
     with open('input.mp3','wb') as file:
         file.write(mp3Bytes.getbuffer())
     
     # Run the model
-    result = model.transcribe(audio="input.mp3", no_speech_threshold=no_speech_threshold, logprob_threshold=logprob_threshold, decode_options={"language":language})
+    result = model.transcribe("input.mp3", **args)
     output = {"text":result["text"]}
     os.remove("input.mp3")
     # Return the results as a dictionary
