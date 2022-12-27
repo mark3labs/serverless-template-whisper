@@ -37,7 +37,8 @@ def inference(model_inputs:dict) -> dict:
     
     # Run the model
     result = model.transcribe("input.mp3", **args)
-    output = {"text":result["text"]}
+    output = {"text":result["text"],"language":language}
+    print(output)
     os.remove("input.mp3")
     # Return the results as a dictionary
     return output
